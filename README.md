@@ -1,4 +1,5 @@
 # api-workshop-103
 
 ### BASIC AUTH
-cd project folder and run "./gradlew cleanIdea idea"
+1.cd project folder and run "./gradlew cleanIdea idea"
+2.run "idea ."
