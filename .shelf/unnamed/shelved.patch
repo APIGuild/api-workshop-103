@@ -1,0 +1,123 @@
+Index: src/main/java/com/tw/apiguild/controller/GreetingController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.tw.apiguild.controller;\n\nimport org.springframework.http.ResponseEntity;\nimport org.springframework.security.core.annotation.AuthenticationPrincipal;\nimport org.springframework.security.core.userdetails.UserDetails;\nimport org.springframework.web.bind.annotation.GetMapping;\nimport org.springframework.web.bind.annotation.RestController;\n\n@RestController\npublic class GreetingController {\n    @GetMapping(path = \"greeting\")\n    public ResponseEntity<String> greeting() {\n        return ResponseEntity.ok(\"Hello!\");\n    }\n\n    @GetMapping(path = \"security/greeting\")\n    public ResponseEntity<String> greeting(@AuthenticationPrincipal UserDetails userDetails) {\n        String message = \"Hello Authenticated User, \" + userDetails.getUsername() + \"!\";\n        return ResponseEntity.ok(message);\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/tw/apiguild/controller/GreetingController.java	(revision 6d0a422095a2a20db6aa404523f93ec42a498fbf)
++++ src/main/java/com/tw/apiguild/controller/GreetingController.java	(revision )
+@@ -1,11 +1,16 @@
+ package com.tw.apiguild.controller;
+ 
++import org.springframework.http.HttpHeaders;
++import org.springframework.http.HttpStatus;
+ import org.springframework.http.ResponseEntity;
+ import org.springframework.security.core.annotation.AuthenticationPrincipal;
+ import org.springframework.security.core.userdetails.UserDetails;
+ import org.springframework.web.bind.annotation.GetMapping;
++import org.springframework.web.bind.annotation.PostMapping;
+ import org.springframework.web.bind.annotation.RestController;
+ 
++import static org.springframework.http.HttpStatus.OK;
++
+ @RestController
+ public class GreetingController {
+     @GetMapping(path = "greeting")
+@@ -18,4 +23,11 @@
+         String message = "Hello Authenticated User, " + userDetails.getUsername() + "!";
+         return ResponseEntity.ok(message);
+     }
++
++    @PostMapping(path = "/login")
++    public ResponseEntity<String> login() {
++        HttpHeaders headers = new HttpHeaders();
++        headers.add("Authorization", "Bearer ");
++        return new ResponseEntity<>("login", headers, OK);
++    }
+ }
+Index: build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>buildscript {\n\text {\n\t\tspringBootVersion = '1.5.8.RELEASE'\n\t}\n\trepositories {\n\t\tmavenCentral()\n\t}\n\tdependencies {\n\t\tclasspath(\"org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}\")\n\t}\n}\n\napply plugin: 'java'\napply plugin: 'idea'\napply plugin: 'org.springframework.boot'\n\ngroup = 'com.tw'\nversion = '0.0.1-SNAPSHOT'\nsourceCompatibility = 1.8\n\nrepositories {\n\tmavenCentral()\n}\n\n\ndependencies {\n\tcompile('org.springframework.boot:spring-boot-starter-security')\n\tcompile('org.springframework.boot:spring-boot-starter-web')\n\ttestCompile('org.springframework.boot:spring-boot-starter-test')\n\ttestCompile('org.springframework.security:spring-security-test')\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- build.gradle	(revision 6d0a422095a2a20db6aa404523f93ec42a498fbf)
++++ build.gradle	(revision )
+@@ -24,6 +24,7 @@
+ 
+ 
+ dependencies {
++	compile('io.jsonwebtoken:jjwt:0.9.0')
+ 	compile('org.springframework.boot:spring-boot-starter-security')
+ 	compile('org.springframework.boot:spring-boot-starter-web')
+ 	testCompile('org.springframework.boot:spring-boot-starter-test')
+Index: src/main/java/com/tw/apiguild/utils/JWTUtil.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/tw/apiguild/utils/JWTUtil.java	(revision )
++++ src/main/java/com/tw/apiguild/utils/JWTUtil.java	(revision )
+@@ -0,0 +1,59 @@
++package com.tw.apiguild.utils;
++
++import org.springframework.beans.factory.annotation.Value;
++
++public class JWTUtil {
++
++    @Value("${jwt.secret}")
++    private String secret;
++
++    public User parseToken(String token) {
++        try {
++            Claims body = Jwts.parser()
++                    .setSigningKey(secret)
++                    .parseClaimsJws(token)
++                    .getBody();
++
++            User u = new User();
++            u.setUsername(body.getSubject());
++            u.setId(Long.parseLong((String) body.get("userId")));
++            u.setRole((String) body.get("role"));
++
++            return u;
++
++        } catch (JwtException | ClassCastException e) {
++            return null;
++        }
++    }
++
++    public class JwtUtil {
++
++        @Value("${jwt.secret}")
++        private String secret;
++
++        /**
++         * Tries to parse specified String as a JWT token. If successful, returns User object with username, id and role prefilled (extracted from token).
++         * If unsuccessful (token is invalid or not containing all required user properties), simply returns null.
++         *
++         * @param token the JWT token to parse
++         * @return the User object extracted from specified token or null if a token is invalid.
++         */
++        public User parseToken(String token) {
++            try {
++                Claims body = Jwts.parser()
++                        .setSigningKey(secret)
++                        .parseClaimsJws(token)
++                        .getBody();
++
++                User u = new User();
++                u.setUsername(body.getSubject());
++                u.setId(Long.parseLong((String) body.get("userId")));
++                u.setRole((String) body.get("role"));
++
++                return u;
++
++            } catch (JwtException | ClassCastException e) {
++                return null;
++            }
++        }
++}
+\ No newline at end of file
