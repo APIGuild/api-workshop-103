@@ -1,5 +1,7 @@
 # api-workshop-103
 
-### BASIC AUTH
-1.cd project folder and run "./gradlew cleanIdea idea"
-2.run "idea ."
+### Json web token (JWT)
+#### Requirement
+Enable JWT Authentication
+
+git checkout step-3-jwt
