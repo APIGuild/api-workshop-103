@@ -29,3 +29,20 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
     }
 }
 ```
+
+#### Postman
+
+http://localhost:8080/login
+
+body
+ raw JSON/(application/json)
+ ```json
+     {
+     	"username": "your name",
+     	"password": "your password"
+     }
+ ```
+http://localhost:8080/jwt/greeting
+
+header
+Authorization Bearer "your token"
