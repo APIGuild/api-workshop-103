@@ -10,7 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().regexMatchers("security/greeting").fullyAuthenticated();
+        http.authorizeRequests().regexMatchers("security/greeting").hasRole("ADMIN");
         http.csrf().disable();
         http.httpBasic();
     }
@@ -19,6 +19,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth
                 .inMemoryAuthentication()
-                .withUser("user").password("password");
+                .withUser("admin").password("password").roles("ADMIN");
     }
 }
