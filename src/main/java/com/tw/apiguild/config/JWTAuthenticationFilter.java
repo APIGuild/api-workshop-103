@@ -31,7 +31,14 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
             return ;
         }
 
-        //TODO: implement simple jwt validation
+        String user = Jwts.parser()
+                .setSigningKey(ApplicationConstants.KEY)
+                .parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
+                .getBody()
+                .getSubject();
+
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, "", new ArrayList<>());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         chain.doFilter(request, response);
 
     }
