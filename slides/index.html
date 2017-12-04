@@ -1,0 +1,159 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/white.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section class="title">
+					<h1>API Capability Building Workshop III</h1>
+					<h3>API Security and Load Balancer -- By Chaowei, Kai</h3>
+        </section>
+
+        
+				<section>
+					<h2>Topics</h2>
+					<table>
+            <thead class="purple"><tr><th></th><th></th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong><a href="#/part-1">Part 1</a></strong></td>
+                <td>Authentication & Authorization</td>
+              </tr>
+							<tr>
+								<td><strong><a href="#/part-2">Part 2</a></strong></td>
+								<td>Load Balancer</td>
+							</tr>
+							<tr>
+								<td><strong><a href="#/part-3">Part 3</a></strong></td>
+								<td>API Gateway</td>
+							</tr>
+            </tbody>
+          </table>
+        </section>
+
+				<section id="part-1" class="title">
+            <h1>Authentication&Authorization</h1>
+        </section>
+        <section>
+					<ul>
+						<li>
+							<b>Authentication</b> = login + password (who you are)
+						</li>
+						<li>
+							<b>Authorization</b> = permissions (what you are allowed to do)
+						</li>
+          </ul>
+          <img src="images/Testing_Dojo_Illustrations_03_Authentication_VS_Authorization.png" />
+				</section>
+				
+				<section>
+					<h2>Exercise</h2>
+					<ol>
+						<li>https://github.com/APIGuild/api-workshop-103</li>
+					</ol>
+				</section>
+
+
+
+
+				<section id="part-3" class="title">
+					<h1>Load Balancer</h1>
+				</section>
+
+				<section>
+					<img src="images/no_lb.png" />
+				</section>
+
+				<section>
+					<p>A load balancer is a device that acts as a reverse proxy and distributes network or application traffic across a number of 
+						what is a load balancer servers.</p>
+					<img src="images/what_is_load_balancing.png" height="450"/>
+				</section>
+
+				<section>
+					<h2>Load Balancing Algorithms</h2>
+					<ul>
+						<li>Round Robin</li>
+						<li>Least Connections</li>
+						<li>Least Response Time</li>
+						<li>IP Hash</li>
+					</ul>
+				</section>
+
+        <section id="part-4" class="title">
+          <h1>API Gateway</h1>
+				</section>
+
+				<section>
+					<h2>Problems</h2>
+					<ul>
+						<li>
+							Different clients need different data.					
+						</li>
+						<li>
+							Client could make that many requests over a LAN.					
+						</li>
+						<li>
+							Some services might use protocols that are not web-friendly.
+						</li>
+						<li>
+							Service instances and their locations (host+port) changes dynamically.								
+						</li>
+						<li>
+							Difficult to refactor the microservices.								
+						</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>API Gateway</h2>
+					<ul style="font-size:0.8em">
+						<li>request routing, composition, and protocol translation</li>
+						<li>authentication</li>
+						<li>monitoring</li>
+						<li>load balancing</li>
+						<li>caching</li>
+						<li>request shaping</li>
+						<li>management</li>
+						<li>...</li>
+					</ul>
+					<img src="images/apigateway.png" style="margin-top: -250px;margin-left: 350px;height:400px;">
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			Reveal.initialize({
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
